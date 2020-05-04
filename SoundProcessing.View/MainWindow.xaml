@@ -1,0 +1,70 @@
+﻿<Window
+    x:Class="SoundProcessing.View.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:SoundProcessing.View"
+    mc:Ignorable="d"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:usercontrols="clr-namespace:SoundProcessing.View.UserControls"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextElement.FontWeight="Regular"
+    TextElement.FontSize="13"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
+    Background="{DynamicResource MaterialDesignPaper}"
+    FontFamily="{DynamicResource MaterialDesignFont}"
+    Title="MainWindow"
+    WindowState="Maximized"
+    Height="800"
+    Width="1300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="Auto" />
+            <RowDefinition
+                Height="*" />
+        </Grid.RowDefinitions>
+        <Menu
+            Grid.Row="0"
+            IsMainMenu="True">
+            <MenuItem
+                Header="_File">
+                <MenuItem
+                    Header="_Open"
+                    Command="{Binding Open}">
+                    <MenuItem.Icon>
+                        <materialDesign:PackIcon
+                            Kind="OpenInApp"></materialDesign:PackIcon>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+        </Menu>
+
+        <Grid
+            Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition
+                    Width="*" />
+                <ColumnDefinition
+                    Width="2*" />
+                <ColumnDefinition
+                    Width="*" />
+            </Grid.ColumnDefinitions>
+            <usercontrols:FrequencyFinderView
+                Grid.Column="0"
+                DataContext="{Binding FrequencyFinderViewModel}" />
+
+            <usercontrols:SoundGeneratorView
+                Grid.Column="1"
+                DataContext="{Binding SoundGeneratorViewModel}" />
+
+            <usercontrols:SoundPlayerView
+                Grid.Column="2"
+                DataContext="{Binding SoundPlayerViewModel}" />
+        </Grid>
+
+    </Grid>
+
+</Window>
