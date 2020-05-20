@@ -19,5 +19,18 @@ namespace SoundProcessing.Core.Helpers
             var length = (int)Math.Log2(data.Length);
             return data.Take((int)Math.Pow(2, length)).ToArray();
         }
+
+        public static double[] PreEmphasis(double[] data)
+        {
+            var result = new double[data.Length];
+            
+            result[0] = data[0];
+            for (int i = 1; i < data.Length; i++)
+            {
+                result[i] = data[i] - 0.9 * data[i - 1];
+            }
+
+            return result;
+        }
     }
 }

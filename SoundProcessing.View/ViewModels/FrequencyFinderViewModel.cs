@@ -1,4 +1,5 @@
-﻿using SoundProcessing.Core.FrequencyCalculations;
+﻿using SoundProcessing.Core.Fourier.Windows;
+using SoundProcessing.Core.FrequencyCalculations;
 using SoundProcessing.View.ViewModels.Base;
 using System.Collections.Generic;
 using System.Windows.Input;
@@ -27,6 +28,7 @@ namespace SoundProcessing.View.ViewModels
             {
                 new Autocorrelation(),
                 new AMDFMethod(),
+                new FourierMethod(new HanningWindow()),
             };
 
             SelectedFrequencyFinder = FrequencyFinders[0];

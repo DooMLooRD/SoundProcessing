@@ -9,7 +9,7 @@ namespace SoundProcessing.Core.Fourier
     {
         public static Complex[] FFT(double[] data)
         {
-            var complexData = data.Select(c => (Complex)c).ToArray();
+            var complexData = data.Select(c => (Complex)c / data.Length).ToArray();
 
             FFT1D(complexData);
 
