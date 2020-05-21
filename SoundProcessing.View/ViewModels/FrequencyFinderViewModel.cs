@@ -15,15 +15,17 @@ namespace SoundProcessing.View.ViewModels
         public ICommand FindFrequenciesCommand { get; set; }
         public SoundGeneratorViewModel SoundGeneratorViewModel { get; set; }
         public SoundPlayerViewModel SoundPlayerViewModel { get; set; }
+        public SoundChartViewModel SoundChartViewModel { get; }
+
         public WavViewModel SelectedSound { get => selectedSound; set { selectedSound = value; IsFindButtonEnabled = selectedSound != null; } }
 
         public bool IsFindButtonEnabled { get; set; }
 
-        public FrequencyFinderViewModel(SoundGeneratorViewModel soundGeneratorViewModel, SoundPlayerViewModel soundPlayerViewModel)
+        public FrequencyFinderViewModel(SoundGeneratorViewModel soundGeneratorViewModel, SoundPlayerViewModel soundPlayerViewModel, SoundChartViewModel soundChartViewModel)
         {
             SoundGeneratorViewModel = soundGeneratorViewModel;
             SoundPlayerViewModel = soundPlayerViewModel;
-
+            SoundChartViewModel = soundChartViewModel;
             FrequencyFinders = new List<ICalculateFrequency>
             {
                 new Autocorrelation(),
@@ -38,7 +40,9 @@ namespace SoundProcessing.View.ViewModels
         private void FindFrequencies()
         {
             var result = SelectedFrequencyFinder.Calculate(SelectedSound.WavData);
+
             SoundGeneratorViewModel.SetFrequencies(result);
+            SoundChartViewModel.AddSounds(result, SelectedSound.WavData.Samples);
         }
     }
 }

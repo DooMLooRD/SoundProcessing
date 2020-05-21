@@ -56,9 +56,21 @@
                 Grid.Column="0"
                 DataContext="{Binding FrequencyFinderViewModel}" />
 
-            <usercontrols:SoundGeneratorView
-                Grid.Column="1"
-                DataContext="{Binding SoundGeneratorViewModel}" />
+            <Grid
+                Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition
+                        Height="*" />
+                    <RowDefinition
+                        Height="2*" />
+                </Grid.RowDefinitions>
+                <usercontrols:SoundChart
+                    DataContext="{Binding SoundChartViewModel}"/>
+                <usercontrols:SoundGeneratorView
+                    Grid.Row="1"
+                    DataContext="{Binding SoundGeneratorViewModel}" />
+            </Grid>
+
 
             <usercontrols:SoundPlayerView
                 Grid.Column="2"

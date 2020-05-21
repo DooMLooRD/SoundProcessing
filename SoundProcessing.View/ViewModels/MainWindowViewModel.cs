@@ -12,11 +12,14 @@ namespace SoundProcessing.View.ViewModels
         public SoundPlayerViewModel SoundPlayerViewModel { get; set; }
         public SoundGeneratorViewModel SoundGeneratorViewModel { get; set; }
         public FrequencyFinderViewModel FrequencyFinderViewModel { get; set; }
+        public SoundChartViewModel SoundChartViewModel { get; set; }
+
         public MainWindowViewModel()
         {
+            SoundChartViewModel = new SoundChartViewModel();
             SoundPlayerViewModel = new SoundPlayerViewModel();
             SoundGeneratorViewModel = new SoundGeneratorViewModel(SoundPlayerViewModel);
-            FrequencyFinderViewModel = new FrequencyFinderViewModel(SoundGeneratorViewModel, SoundPlayerViewModel);
+            FrequencyFinderViewModel = new FrequencyFinderViewModel(SoundGeneratorViewModel, SoundPlayerViewModel, SoundChartViewModel);
             Open = new RelayCommand(Load);
         }
 

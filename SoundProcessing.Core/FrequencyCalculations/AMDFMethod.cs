@@ -20,6 +20,8 @@ namespace SoundProcessing.Core.FrequencyCalculations
                 var lastValue = double.MinValue;
                 var monotonicityChanged = 0;
                 var isGrowing = true;
+                var found = false;
+                var result = new double[samples.Length - 1];
 
                 for (int j = 1; j < samples.Length; j++)
                 {
@@ -29,7 +31,9 @@ namespace SoundProcessing.Core.FrequencyCalculations
                         correlated += Math.Abs(samples[k] - samples[k + j]);
                     }
 
-                    if (isGrowing != lastValue < correlated)
+                    result[j - 1] = correlated;
+
+                    if (!found && isGrowing != lastValue < correlated)
                     {
                         isGrowing = lastValue < correlated;
                         monotonicityChanged++;
@@ -37,7 +41,7 @@ namespace SoundProcessing.Core.FrequencyCalculations
                         if (monotonicityChanged == 2)
                         {
                             localMin = (j - 1, lastValue);
-                            break;
+                            found = true;
                         }
                     }
 
@@ -56,6 +60,7 @@ namespace SoundProcessing.Core.FrequencyCalculations
                         StartTime = i * 50,
                         EndTime = i * 50 + 50,
                         Frequency = frequency,
+                        Result = result
                     });
                 }
             }

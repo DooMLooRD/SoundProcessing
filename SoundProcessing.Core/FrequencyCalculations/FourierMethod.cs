@@ -25,7 +25,7 @@ namespace SoundProcessing.Core.FrequencyCalculations
                 var samples = wavData.ChunkedSamples[i];
 
                 var reducedSamples = FourierHelper.ReduceToPow2(samples);
-                //reducedSamples = FourierHelper.PreEmphasis(reducedSamples);
+                reducedSamples = FourierHelper.PreEmphasis(reducedSamples);
                 reducedSamples = _fourierWindow.Windowing(reducedSamples);
 
                 var complexSamples = FastFourierTransform.FFT(reducedSamples);
@@ -55,6 +55,7 @@ namespace SoundProcessing.Core.FrequencyCalculations
                         StartTime = i * 50,
                         EndTime = i * 50 + 50,
                         Frequency = frequency,
+                        Result = complexSamples.Select(c => c.Magnitude).ToArray()
                     });
                 }
             }

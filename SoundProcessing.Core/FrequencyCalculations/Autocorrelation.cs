@@ -18,6 +18,8 @@ namespace SoundProcessing.Core.FrequencyCalculations
                 var lastValue = double.MaxValue;
                 var monotonicityChanged = 0;
                 var isFalling = true;
+                var found = false;
+                var result = new double[samples.Length - 1];
 
                 for (int j = 1; j < samples.Length; j++)
                 {
@@ -27,7 +29,9 @@ namespace SoundProcessing.Core.FrequencyCalculations
                         correlated += samples[k] * samples[k + j];
                     }
 
-                    if (isFalling != lastValue > correlated)
+                    result[j - 1] = correlated;
+
+                    if (!found && isFalling != lastValue > correlated)
                     {
                         isFalling = lastValue > correlated;
                         monotonicityChanged++;
@@ -35,11 +39,16 @@ namespace SoundProcessing.Core.FrequencyCalculations
                         if (monotonicityChanged == 2)
                         {
                             localMax = (j - 1, lastValue);
-                            break;
+                            found = true;
                         }
                     }
 
                     lastValue = correlated;
+                }
+
+                if (localMax.Index == 0)
+                {
+                    continue;
                 }
 
                 var frequency = wavData.FormatChunk.SampleRate / localMax.Index;
@@ -54,6 +63,7 @@ namespace SoundProcessing.Core.FrequencyCalculations
                         StartTime = i * 50,
                         EndTime = i * 50 + 50,
                         Frequency = frequency,
+                        Result = result
                     });
                 }
             }
