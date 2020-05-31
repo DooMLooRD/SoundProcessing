@@ -1,38 +1,46 @@
-﻿using SoundProcessing.Core.Fourier;
+﻿using SoundProcessing.Core.Filtration;
+using SoundProcessing.Core.Fourier;
 using SoundProcessing.Core.Fourier.Windows;
 using SoundProcessing.Core.Helpers;
 using SoundProcessing.Core.Model;
 using SoundProcessing.Core.Wav;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
+using System.Text;
 
-namespace SoundProcessing.Core.Filtration
+namespace SoundProcessing.Core.WahWah
 {
-    public class FrequencyFiltration
+    public class WahWah
     {
         private readonly IFourierWindow _window;
+        private readonly FilterType _type;
         private readonly int _m;
         private readonly int _r;
-        private readonly FilterType _type;
         private readonly int _l;
-        private readonly double _fc;
-        private readonly int? _n;
+        private readonly int _fl;
+        private readonly int _fh;
+        private readonly int _bandSize;
+        private readonly int _lfo;
+        private readonly int _gain;
 
-        public FrequencyFiltration(IFourierWindow window, int m, int r, FilterType type, int l, double fc, int? n = null)
+        public WahWah(IFourierWindow window, FilterType type, int m, int r, int l, int fl, int fh, int bandSize, int lfo, int gain)
         {
             _window = window;
+            _type = type;
             _m = m;
             _r = r;
-            _type = type;
             _l = l;
-            _fc = fc;
-            _n = n;
+            _fl = fl;
+            _fh = fh;
+            _bandSize = bandSize;
+            _lfo = lfo;
+            _gain = gain;
         }
 
-        public double[] FilterData(WavData wavData)
+        public double[] Process(WavData wavData)
         {
-            var n = _n ?? FourierHelper.GetExpandedPow2(_m + _l - 1);
+            var n = FourierHelper.GetExpandedPow2(_m + _l - 1);
             var size = wavData.Samples.Length + n - _m;
             var result = new double[size];
 
@@ -65,47 +73,38 @@ namespace SoundProcessing.Core.Filtration
                 }
             }
 
-            var windowFilterFactors = _window.WindowFactors(_l);
-            var filterFactors = BasicFilter.LowPassFilterFactors(_fc, wavData.FormatChunk.SampleRate, _l);
-            var filtered = new double[n];
-            for (int i = 0; i < _l; i++)
-            {
-                filtered[i] = windowFilterFactors[i] * filterFactors[i];
-            }
-
-            for (int i = _l; i < n; i++)
-            {
-                filtered[i] = 0;
-            }
-
-
-            if (_type == FilterType.NotCausal)
-            {
-                var shiftNumberFilter = (_l - 1) / 2;
-                var shiftNumberWindow = (_m - 1) / 2;
-
-                var shiftedFilter = filtered.Take(shiftNumberFilter);
-                var filteredTemp = filtered.Skip(shiftNumberFilter).ToList();
-                filteredTemp.AddRange(shiftedFilter);
-                filtered = filteredTemp.ToArray();
-
-                for (int i = 0; i < windows.Length; i++)
-                {
-                    var shiftedWindow = windows[i].Take(shiftNumberWindow);
-                    var windowTemp = windows[i].Skip(shiftNumberWindow).ToList();
-                    windowTemp.AddRange(shiftedWindow);
-                    windows[i] = windowTemp.ToArray();
-                }
-            }
-
-            var filteredComplex = FourierTransform.FFT(filtered);
-
+            var freq = (double)wavData.FormatChunk.SampleRate / _lfo;
+            var filterSize = _fh - _bandSize - _fl;
             for (int i = 0; i < windows.Length; i++)
             {
+                var lowPass = (Math.Sin(2 * Math.PI * i * _r / freq) * 0.5 + 0.5) * filterSize + _fl;
+                var highPass = lowPass + _bandSize;
+
+                var windowFilterFactors = _window.WindowFactors(_l);
+                var filterFactors = BasicFilter.LowPassFilterFactors(lowPass, wavData.FormatChunk.SampleRate, _l);
+                var highFilterFactors = BasicFilter.HighPassFilterFactors(highPass, wavData.FormatChunk.SampleRate, _l);
+
+                var filtered = new double[n];
+                var highFiltered = new double[n];
+
+                for (int j = 0; j < _l; j++)
+                {
+                    filtered[j] = windowFilterFactors[j] * filterFactors[j];
+                    highFiltered[j] = windowFilterFactors[j] * highFilterFactors[j];
+                }
+
+                for (int j = _l; j < n; j++)
+                {
+                    filtered[j] = 0;
+                    highFiltered[j] = 0;
+                }
+
+                var filteredComplex = FourierTransform.FFT(filtered);
+                var highFilteredComplex = FourierTransform.FFT(highFiltered);
                 windowsComplex[i] = FourierTransform.FFT(windows[i]);
                 for (int j = 0; j < windowsComplex[i].Length; j++)
                 {
-                    windowsComplex[i][j] *= filteredComplex[j];
+                    windowsComplex[i][j] *= filteredComplex[j] * highFilteredComplex[j] * _gain;
                 }
                 windows[i] = FourierTransform.IFFT(windowsComplex[i]);
             }

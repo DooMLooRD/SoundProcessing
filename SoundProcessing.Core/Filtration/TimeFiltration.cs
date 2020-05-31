@@ -21,7 +21,7 @@ namespace SoundProcessing.Core.Filtration
         {
             var result = new double[wavData.Samples.Length + _l - 1];
 
-            var filterFactors = BasicFilter.FilterFactors(_fc, wavData.FormatChunk.SampleRate, _l);
+            var filterFactors = BasicFilter.LowPassFilterFactors(_fc, wavData.FormatChunk.SampleRate, _l);
             var filtered = _window.Windowing(filterFactors);
 
             var data = wavData.Samples.ToList();
