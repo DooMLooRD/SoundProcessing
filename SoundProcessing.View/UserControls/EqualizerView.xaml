@@ -1,0 +1,125 @@
+﻿<UserControl
+    x:Class="SoundProcessing.View.UserControls.EqualizerView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:SoundProcessing.View.UserControls"
+    mc:Ignorable="d"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextElement.FontWeight="Regular"
+    TextElement.FontSize="13"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
+    Background="{DynamicResource MaterialDesignPaper}"
+    FontFamily="{DynamicResource MaterialDesignFont}"
+    d:DesignHeight="650"
+    d:DesignWidth="800">
+    <GroupBox
+        Header="Equalizer"
+        BorderThickness="0"
+        Background="{StaticResource MaterialDesignPaper}"
+        Style="{DynamicResource MaterialDesignCardGroupBox}"
+        Padding="0"
+        Margin="16">
+        <GroupBox.HeaderTemplate>
+            <DataTemplate>
+                <StackPanel
+                    Margin="16 8"
+                    Orientation="Horizontal">
+                    <materialDesign:PackIcon
+                        Kind="Equalizer"
+                        Height="32"
+                        Width="32"
+                        VerticalAlignment="Center" />
+                    <TextBlock
+                        Margin="8,0,0,0"
+                        VerticalAlignment="Center"
+                        Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
+                        Text="{Binding}" />
+                </StackPanel>
+            </DataTemplate>
+        </GroupBox.HeaderTemplate>
+        <ScrollViewer
+            VerticalScrollBarVisibility="Auto"
+            HorizontalScrollBarVisibility="Disabled">
+            <StackPanel
+                Margin="10">
+                <ComboBox
+                    materialDesign:HintAssist.FloatingScale="1.2"
+                    materialDesign:HintAssist.FloatingOffset="0, -20"
+                    materialDesign:HintAssist.Hint="Sound file"
+                    Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                    Margin="15"
+                    ItemsSource="{Binding SoundPlayerViewModel.Sounds}"
+                    SelectedItem="{Binding SelectedSound}" />
+                <Grid
+                    Margin="15">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition
+                            Width="*" />
+                        <ColumnDefinition
+                            Width="*" />
+                        <ColumnDefinition
+                            Width="*" />
+                        <ColumnDefinition
+                            Width="*" />
+                        <ColumnDefinition
+                            Width="*" />
+                        <ColumnDefinition
+                            Width="*" />
+                        <ColumnDefinition
+                            Width="*" />
+                        <ColumnDefinition
+                            Width="*" />
+                        <ColumnDefinition
+                            Width="*" />
+                        <ColumnDefinition
+                            Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <local:EqualizerSlider
+                        DataContext="{Binding Gains[0]}"
+                        Grid.Column="0" />
+                    <local:EqualizerSlider
+                        DataContext="{Binding Gains[1]}"
+                        Grid.Column="1" />
+                    <local:EqualizerSlider
+                        DataContext="{Binding Gains[2]}"
+                        Grid.Column="2" />
+                    <local:EqualizerSlider
+                        DataContext="{Binding Gains[3]}"
+                        Grid.Column="3" />
+                    <local:EqualizerSlider
+                        DataContext="{Binding Gains[4]}"
+                        Grid.Column="4" />
+                    <local:EqualizerSlider
+                        DataContext="{Binding Gains[5]}"
+                        Grid.Column="5" />
+                    <local:EqualizerSlider
+                        DataContext="{Binding Gains[6]}"
+                        Grid.Column="6" />
+                    <local:EqualizerSlider
+                        DataContext="{Binding Gains[7]}"
+                        Grid.Column="7" />
+                    <local:EqualizerSlider
+                        DataContext="{Binding Gains[8]}"
+                        Grid.Column="8" />
+                    <local:EqualizerSlider
+                        DataContext="{Binding Gains[9]}"
+                        Grid.Column="9" />
+                </Grid>
+                <Button
+                    Margin="15"
+                    Grid.Column="2"
+                    IsEnabled="{Binding IsButtonEnabled}"
+                    Content="Equalize"
+                    Command="{Binding EqualizeCommand}" />
+                <local:EqualizerCharts
+                    Margin="15"
+                    Height="320"
+                    DataContext="{Binding ChartsViewModel}" />
+            </StackPanel>
+        </ScrollViewer>
+    </GroupBox>
+</UserControl>

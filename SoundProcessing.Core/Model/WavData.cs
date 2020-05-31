@@ -53,6 +53,38 @@ namespace SoundProcessing.Core.Wav
             };
         }
 
+        public WavData(int sampleRate, double[] samples)
+        {
+            short bitsPerSample = 16;
+
+            FormatChunk = new Format
+            {
+                ChunkId = 0x20746D66, //'fmt' in ASCII
+                ChunkSize = 16,
+                AudioFormat = 1,
+                NumChannels = 1,
+                SampleRate = sampleRate,
+                ByteRate = sampleRate + bitsPerSample / 8,
+                BlockAlign = (short)(bitsPerSample / 8),
+                BitsPerSample = bitsPerSample
+            };
+
+            DataChunk = new Data
+            {
+                ChunkId = 0x61746164 //'data' in ASCII
+            };
+
+            Samples = samples;
+            AdjustDataChunk();
+
+            DescriptorChunk = new Descriptor
+            {
+                ChunkId = 0x46464952, //'RIFF' in ASCII
+                ChunkSize = 36 + DataChunk.ChunkSize,
+                Format = 0x45564157 //'WAVE' in ASCII
+            };
+        }
+
         public void ChangeSamples(double[] samples)
         {
             Samples = samples;

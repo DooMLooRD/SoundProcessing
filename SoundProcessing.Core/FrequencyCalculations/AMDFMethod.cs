@@ -3,7 +3,6 @@ using SoundProcessing.Core.Wav;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace SoundProcessing.Core.FrequencyCalculations
 {

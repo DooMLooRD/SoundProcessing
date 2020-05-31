@@ -1,12 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace SoundProcessing.Core.Fourier.Windows
 {
     public class BarlettWindow : IFourierWindow
     {
+        public double[] WindowFactors(int m)
+        {
+            var result = new double[m];
+
+            for (int i = 0; i < m; i++)
+            {
+                result[i] = 2 / (m - 1) * ((m - 1) / 2 - Math.Abs(i - (m - 1) / 2));
+            }
+
+            return result;
+        }
+
         public double[] Windowing(double[] data)
         {
             var n = data.Length;
@@ -17,6 +26,11 @@ namespace SoundProcessing.Core.Fourier.Windows
             }
 
             return data;
+        }
+
+        public override string ToString()
+        {
+            return "Barlett Window";
         }
     }
 }

@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace SoundProcessing.Core.Fourier.Windows
+﻿namespace SoundProcessing.Core.Fourier.Windows
 {
-    public class HammingWindow : IFourierWindow
+    public class RectangularWindow : IFourierWindow
     {
         public double[] WindowFactors(int m)
         {
@@ -10,7 +8,7 @@ namespace SoundProcessing.Core.Fourier.Windows
 
             for (int i = 0; i < m; i++)
             {
-                result[i] = 0.53836 - 0.46164 * Math.Cos(2 * Math.PI * i / (m - 1));
+                result[i] = i < m ? 1 : 0;
             }
 
             return result;
@@ -18,11 +16,11 @@ namespace SoundProcessing.Core.Fourier.Windows
 
         public double[] Windowing(double[] data)
         {
-            var n = data.Length;
+            int n = data.Length;
 
             for (int i = 0; i < data.Length; i++)
             {
-                data[i] *= 0.53836 - 0.46164 * Math.Cos(2 * Math.PI * i / (n - 1));
+                data[i] = i < n ? data[i] : 0;
             }
 
             return data;
@@ -30,7 +28,7 @@ namespace SoundProcessing.Core.Fourier.Windows
 
         public override string ToString()
         {
-            return "Hamming Window";
+            return "Rectangular Window";
         }
     }
 }

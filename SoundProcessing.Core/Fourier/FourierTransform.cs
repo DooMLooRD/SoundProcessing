@@ -5,11 +5,44 @@ using System.Numerics;
 
 namespace SoundProcessing.Core.Fourier
 {
-    public class FastFourierTransform
+    public class FourierTransform
     {
+
+        public static Complex[] DFT(double[] points)
+        {
+            var transformed = new Complex[points.Length];
+            int N = points.Length;
+            for (int i = 0; i < N; i++)
+            {
+                Complex transformedValue = Complex.Zero;
+                for (int j = 0; j < N; j++)
+                {
+                    transformedValue += points[j] * Complex.Exp(new Complex(0, -2 * Math.PI * i * j / N));
+                }
+                transformed[i] = transformedValue / N;
+            }
+            return transformed;
+        }
+        public static double[] IDFT(Complex[] points)
+        {
+            var transformed = new double[points.Length];
+
+            int N = points.Length;
+            for (int i = 0; i < N; i++)
+            {
+                double transformedValue = 0;
+                for (int j = 0; j < N; j++)
+                {
+                    transformedValue += (points[j] * Complex.Exp(new Complex(0, 2 * Math.PI * i * j / N))).Real;
+                }
+                transformed[i] = transformedValue;
+            }
+            return transformed;
+        }
+
         public static Complex[] FFT(double[] data)
         {
-            var complexData = data.Select(c => (Complex)c / data.Length).ToArray();
+            var complexData = data.Select(c => (Complex)c).ToArray();
 
             FFT1D(complexData);
 

@@ -1,0 +1,121 @@
+﻿<UserControl
+    x:Class="SoundProcessing.View.UserControls.EqualizerSlider"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:SoundProcessing.View.UserControls"
+    mc:Ignorable="d"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextElement.FontWeight="Regular"
+    TextElement.FontSize="13"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
+    Background="{DynamicResource MaterialDesignPaper}"
+    FontFamily="{DynamicResource MaterialDesignFont}"
+    d:DesignHeight="300"
+    d:DesignWidth="100">
+    <Grid Height="300">
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="*" />
+            <RowDefinition
+                Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition
+                    Width="Auto" />
+                <ColumnDefinition
+                    Width="*" />
+            </Grid.ColumnDefinitions>
+            <Slider
+                Value="{Binding Value}"
+                Margin="5 5 5 16"
+                IsSnapToTickEnabled="True"
+                TickFrequency="2"
+                TickPlacement="BottomRight"
+                Orientation="Vertical"
+                Minimum="-10"
+                Maximum="10" />
+            <Grid
+                Grid.Column="1"
+                Margin="5 5 5 5">
+                <Grid.RowDefinitions>
+                    <RowDefinition
+                        Height="*" />
+                    <RowDefinition
+                        Height="*" />
+                    <RowDefinition
+                        Height="*" />
+                    <RowDefinition
+                        Height="*" />
+                    <RowDefinition
+                        Height="*" />
+                    <RowDefinition
+                        Height="*" />
+                    <RowDefinition
+                        Height="*" />
+                    <RowDefinition
+                        Height="*" />
+                    <RowDefinition
+                        Height="*" />
+                    <RowDefinition
+                        Height="*" />
+                    <RowDefinition
+                        Height="*" />
+                </Grid.RowDefinitions>
+                <TextBlock
+                    Grid.Row="0"
+                    Style="{StaticResource MaterialDesignOverlineTextBlock}">+10 dB
+                </TextBlock>
+                <TextBlock
+                    Grid.Row="1"
+                    Style="{StaticResource MaterialDesignOverlineTextBlock}">+8 dB
+                </TextBlock>
+                <TextBlock
+                    Grid.Row="2"
+                    Style="{StaticResource MaterialDesignOverlineTextBlock}">+6 dB
+                </TextBlock>
+                <TextBlock
+                    Grid.Row="3"
+                    Style="{StaticResource MaterialDesignOverlineTextBlock}">+4 dB
+                </TextBlock>
+                <TextBlock
+                    Grid.Row="4"
+                    Style="{StaticResource MaterialDesignOverlineTextBlock}">+2 dB
+                </TextBlock>
+                <TextBlock
+                    Grid.Row="5"
+                    Style="{StaticResource MaterialDesignOverlineTextBlock}">0 dB
+                </TextBlock>
+                <TextBlock
+                    Grid.Row="6"
+                    Style="{StaticResource MaterialDesignOverlineTextBlock}">-2 dB
+                </TextBlock>
+                <TextBlock
+                    Grid.Row="7"
+                    Style="{StaticResource MaterialDesignOverlineTextBlock}">-4 dB
+                </TextBlock>
+                <TextBlock
+                    Grid.Row="8"
+                    Style="{StaticResource MaterialDesignOverlineTextBlock}">-6 dB
+                </TextBlock>
+                <TextBlock
+                    Grid.Row="9"
+                    Style="{StaticResource MaterialDesignOverlineTextBlock}">-8 dB
+                </TextBlock>
+                <TextBlock
+                    Grid.Row="10"
+                    Style="{StaticResource MaterialDesignOverlineTextBlock}">-10 dB
+                </TextBlock>
+            </Grid>
+        </Grid>
+
+        <TextBlock
+            Text="{Binding Text}"
+            Margin="5"
+            Grid.Row="1" />
+    </Grid>
+</UserControl>

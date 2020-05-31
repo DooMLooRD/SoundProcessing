@@ -9,6 +9,9 @@ namespace SoundProcessing.View.ViewModels
     {
         public ICommand Open { get; set; }
 
+        public int SelectedModel { get; set; } = 0;
+        public FilterViewModel FilterViewModel { get; set; }
+        public EqualizerViewModel EqualizerViewModel { get; set; }
         public SoundPlayerViewModel SoundPlayerViewModel { get; set; }
         public SoundGeneratorViewModel SoundGeneratorViewModel { get; set; }
         public FrequencyFinderViewModel FrequencyFinderViewModel { get; set; }
@@ -18,6 +21,8 @@ namespace SoundProcessing.View.ViewModels
         {
             SoundChartViewModel = new SoundChartViewModel();
             SoundPlayerViewModel = new SoundPlayerViewModel();
+            FilterViewModel = new FilterViewModel(SoundPlayerViewModel);
+            EqualizerViewModel = new EqualizerViewModel(SoundPlayerViewModel);
             SoundGeneratorViewModel = new SoundGeneratorViewModel(SoundPlayerViewModel);
             FrequencyFinderViewModel = new FrequencyFinderViewModel(SoundGeneratorViewModel, SoundPlayerViewModel, SoundChartViewModel);
             Open = new RelayCommand(Load);

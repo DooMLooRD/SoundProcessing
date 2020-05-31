@@ -1,7 +1,6 @@
 ﻿using Microsoft.Win32;
 using SoundProcessing.Core.Wav;
 using SoundProcessing.View.ViewModels.Base;
-using System;
 using System.IO;
 using System.Media;
 using System.Threading.Tasks;

@@ -3,7 +3,6 @@ using OxyPlot;
 using OxyPlot.Wpf;
 using SoundProcessing.Core.Model;
 using SoundProcessing.View.ViewModels.Base;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;

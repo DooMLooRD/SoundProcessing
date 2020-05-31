@@ -26,23 +26,66 @@
             <RowDefinition
                 Height="*" />
         </Grid.RowDefinitions>
-        <Menu
-            Grid.Row="0"
-            IsMainMenu="True">
-            <MenuItem
-                Header="_File">
-                <MenuItem
-                    Header="_Open"
-                    Command="{Binding Open}">
-                    <MenuItem.Icon>
+        <ToolBarTray
+            Grid.Row="0">
+            <ToolBar
+                Style="{DynamicResource MaterialDesignToolBar}"
+                ClipToBounds="True">
+                <Button
+                    Command="{Binding Open}"
+                    ToolTip="Load">
+                    <materialDesign:PackIcon
+                        Kind="FileMultipleOutline" />
+                </Button>
+                <Separator />
+                <ListBox
+                    SelectedIndex="{Binding SelectedModel,Mode=TwoWay}">
+                    <ListBoxItem>
                         <materialDesign:PackIcon
-                            Kind="OpenInApp"></materialDesign:PackIcon>
-                    </MenuItem.Icon>
-                </MenuItem>
-            </MenuItem>
-        </Menu>
+                            Kind="Magnify" />
+                    </ListBoxItem>
+                    <ListBoxItem>
+                        <materialDesign:PackIcon
+                            Kind="Filter" />
+                    </ListBoxItem>
+                    <ListBoxItem>
+                        <materialDesign:PackIcon
+                            Kind="Equalizer" />
+                    </ListBoxItem>
+                </ListBox>
+                <Separator />
+            </ToolBar>
+        </ToolBarTray>
 
         <Grid
+            Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition
+                    Width="2*" />
+                <ColumnDefinition
+                    Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid
+                Visibility="{Binding SelectedModel, Converter={StaticResource ModelConverter},ConverterParameter=0}">
+                <usercontrols:FrequencyFinderView
+                    DataContext="{Binding FrequencyFinderViewModel}" />
+            </Grid>
+            <Grid
+                Visibility="{Binding SelectedModel, Converter={StaticResource ModelConverter},ConverterParameter=1}">
+                <usercontrols:FilterView
+                    DataContext="{Binding FilterViewModel}" />
+            </Grid>
+            <Grid
+                Visibility="{Binding SelectedModel, Converter={StaticResource ModelConverter},ConverterParameter=2}">
+                <usercontrols:EqualizerView
+                    DataContext="{Binding EqualizerViewModel}" />
+            </Grid>
+            <usercontrols:SoundPlayerView
+                Grid.Column="1"
+                DataContext="{Binding SoundPlayerViewModel}" />
+        </Grid>
+
+        <!--<Grid
             Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition
@@ -55,7 +98,6 @@
             <usercontrols:FrequencyFinderView
                 Grid.Column="0"
                 DataContext="{Binding FrequencyFinderViewModel}" />
-
             <Grid
                 Grid.Column="1">
                 <Grid.RowDefinitions>
@@ -65,17 +107,15 @@
                         Height="2*" />
                 </Grid.RowDefinitions>
                 <usercontrols:SoundChart
-                    DataContext="{Binding SoundChartViewModel}"/>
+                    DataContext="{Binding SoundChartViewModel}" />
                 <usercontrols:SoundGeneratorView
                     Grid.Row="1"
                     DataContext="{Binding SoundGeneratorViewModel}" />
             </Grid>
-
-
             <usercontrols:SoundPlayerView
                 Grid.Column="2"
                 DataContext="{Binding SoundPlayerViewModel}" />
-        </Grid>
+        </Grid>-->
 
     </Grid>
 

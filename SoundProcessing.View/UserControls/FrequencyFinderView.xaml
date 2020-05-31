@@ -16,55 +16,77 @@
     FontFamily="{DynamicResource MaterialDesignFont}"
     d:DesignHeight="450"
     d:DesignWidth="800">
-
-    <GroupBox
-        Header="Frequency Finder"
-        BorderThickness="0"
-        Background="{StaticResource MaterialDesignPaper}"
-        Style="{DynamicResource MaterialDesignCardGroupBox}"
-        Padding="0"
-        Margin="16">
-        <GroupBox.HeaderTemplate>
-            <DataTemplate>
-                <StackPanel
-                    Margin="16 8"
-                    Orientation="Horizontal">
-                    <materialDesign:PackIcon
-                        Kind="Magnify"
-                        Height="32"
-                        Width="32"
-                        VerticalAlignment="Center" />
-                    <TextBlock
-                        Margin="8,0,0,0"
-                        VerticalAlignment="Center"
-                        Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
-                        Text="{Binding}" />
-                </StackPanel>
-            </DataTemplate>
-        </GroupBox.HeaderTemplate>
-        <StackPanel Margin="10">
-            <ComboBox
-                materialDesign:HintAssist.FloatingScale="1.2"
-                materialDesign:HintAssist.FloatingOffset="0, -20"
-                materialDesign:HintAssist.Hint="Frequency finder"
-                Style="{StaticResource MaterialDesignFloatingHintComboBox}"
-                Margin="15"
-                ItemsSource="{Binding FrequencyFinders}"
-                SelectedItem="{Binding SelectedFrequencyFinder}" />
-            <ComboBox
-                materialDesign:HintAssist.FloatingScale="1.2"
-                materialDesign:HintAssist.FloatingOffset="0, -20"
-                materialDesign:HintAssist.Hint="Sound file"
-                Style="{StaticResource MaterialDesignFloatingHintComboBox}"
-                Margin="15"
-                ItemsSource="{Binding SoundPlayerViewModel.Sounds}"
-                SelectedItem="{Binding SelectedSound}" />
-            <Button
-                Margin="15"
-                Grid.Column="2"
-                IsEnabled="{Binding IsFindButtonEnabled}"
-                Content="Find frequencies"
-                Command="{Binding FindFrequenciesCommand}" />
-        </StackPanel>
-    </GroupBox>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition
+                Width="*" />
+            <ColumnDefinition
+                Width="2*" />
+        </Grid.ColumnDefinitions>
+        <GroupBox
+            Header="Frequency Finder"
+            BorderThickness="0"
+            Background="{StaticResource MaterialDesignPaper}"
+            Style="{DynamicResource MaterialDesignCardGroupBox}"
+            Padding="0"
+            Margin="16">
+            <GroupBox.HeaderTemplate>
+                <DataTemplate>
+                    <StackPanel
+                        Margin="16 8"
+                        Orientation="Horizontal">
+                        <materialDesign:PackIcon
+                            Kind="Magnify"
+                            Height="32"
+                            Width="32"
+                            VerticalAlignment="Center" />
+                        <TextBlock
+                            Margin="8,0,0,0"
+                            VerticalAlignment="Center"
+                            Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
+                            Text="{Binding}" />
+                    </StackPanel>
+                </DataTemplate>
+            </GroupBox.HeaderTemplate>
+            <StackPanel
+                Margin="10">
+                <ComboBox
+                    materialDesign:HintAssist.FloatingScale="1.2"
+                    materialDesign:HintAssist.FloatingOffset="0, -20"
+                    materialDesign:HintAssist.Hint="Frequency finder"
+                    Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                    Margin="15"
+                    ItemsSource="{Binding FrequencyFinders}"
+                    SelectedItem="{Binding SelectedFrequencyFinder}" />
+                <ComboBox
+                    materialDesign:HintAssist.FloatingScale="1.2"
+                    materialDesign:HintAssist.FloatingOffset="0, -20"
+                    materialDesign:HintAssist.Hint="Sound file"
+                    Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                    Margin="15"
+                    ItemsSource="{Binding SoundPlayerViewModel.Sounds}"
+                    SelectedItem="{Binding SelectedSound}" />
+                <Button
+                    Margin="15"
+                    Grid.Column="2"
+                    IsEnabled="{Binding IsFindButtonEnabled}"
+                    Content="Find frequencies"
+                    Command="{Binding FindFrequenciesCommand}" />
+            </StackPanel>
+        </GroupBox>
+        <Grid
+            Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition
+                    Height="*" />
+                <RowDefinition
+                    Height="2*" />
+            </Grid.RowDefinitions>
+            <local:SoundChart
+                DataContext="{Binding SoundChartViewModel}" />
+            <local:SoundGeneratorView
+                Grid.Row="1"
+                DataContext="{Binding SoundGeneratorViewModel}" />
+        </Grid>
+    </Grid>
 </UserControl>
