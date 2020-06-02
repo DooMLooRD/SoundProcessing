@@ -11,23 +11,23 @@ namespace SoundProcessing.Core.WahWah
     public class WahWah
     {
         private readonly IFourierWindow _window;
-        private readonly int _m;
-        private readonly int _r;
-        private readonly int _l;
-        private readonly int _fl;
-        private readonly int _fh;
+        private readonly int _windowLength;
+        private readonly int _windowHopSize;
+        private readonly int _filterLength;
+        private readonly int _startBandFreq;
+        private readonly int _endBandFreq;
         private readonly int _bandSize;
         private readonly double _lfo;
-        private int _gain;
+        private double _gain;
 
-        public WahWah(IFourierWindow window, int m, int r, int l, int fl, int fh, int bandSize, double lfo, int gain)
+        public WahWah(IFourierWindow window, int windowLength, int windowHopSize, int filterLength, int startBandFreq, int endBandFreq, int bandSize, double lfo, double gain)
         {
             _window = window;
-            _m = m;
-            _r = r;
-            _l = l;
-            _fl = fl;
-            _fh = fh;
+            _windowLength = windowLength;
+            _windowHopSize = windowHopSize;
+            _filterLength = filterLength;
+            _startBandFreq = startBandFreq;
+            _endBandFreq = endBandFreq;
             _bandSize = bandSize;
             _lfo = lfo;
             _gain = gain;
@@ -35,12 +35,12 @@ namespace SoundProcessing.Core.WahWah
 
         public double[] Process(WavData wavData)
         {
-            var n = FourierHelper.GetExpandedPow2(_m + _l - 1);
-            var size = wavData.Samples.Length + n - _m;
+            var n = FourierHelper.GetExpandedPow2(_windowLength + _filterLength - 1);
+            var size = wavData.Samples.Length + n - _windowLength;
             var result = new double[size];
 
-            var windows = new double[size / _r][];
-            var windowsComplex = new Complex[size / _r][];
+            var windows = new double[size / _windowHopSize][];
+            var windowsComplex = new Complex[size / _windowHopSize][];
 
             for (int i = 0; i < windows.Length; i++)
             {
@@ -50,37 +50,37 @@ namespace SoundProcessing.Core.WahWah
 
             if (_gain < 0)
             {
-                _gain = 1 / Math.Abs(_gain);
+                _gain = 1 / Math.Abs(_gain) - 1;
             }
 
-            var windowFactors = _window.WindowFactors(_m);
+            var windowFactors = _window.WindowFactors(_windowLength);
             for (int i = 0; i < windows.Length; i++)
             {
-                for (int j = 0; j < _m; j++)
+                for (int j = 0; j < _windowLength; j++)
                 {
-                    if (i * _r + j < wavData.Samples.Length)
+                    if (i * _windowHopSize + j < wavData.Samples.Length)
                     {
-                        windows[i][j] = windowFactors[j] * wavData.Samples[i * _r + j];
+                        windows[i][j] = windowFactors[j] * wavData.Samples[i * _windowHopSize + j];
                     }
                     else
                     {
                         windows[i][j] = 0;
                     }
                 }
-                for (int j = _m; j < n; j++)
+                for (int j = _windowLength; j < n; j++)
                 {
                     windows[i][j] = 0;
                 }
             }
 
-            var freq = (double)wavData.FormatChunk.SampleRate / _lfo;
-            var filterSize = _fh - _bandSize - _fl;
+            var freq = wavData.FormatChunk.SampleRate / _lfo;
+            var filterSize = _endBandFreq - _bandSize - _startBandFreq;
             for (int i = 0; i < windows.Length; i++)
             {
-                var highPass = (Math.Sin(2 * Math.PI * i * _r / freq) * 0.5 + 0.5) * filterSize + _fl;
+                var highPass = (Math.Sin(2 * Math.PI * i * _windowHopSize / freq) * 0.5 + 0.5) * filterSize + _startBandFreq;
                 var lowPass = highPass + _bandSize;
 
-                var bandFilterFactors = BasicFilter.BandPassFilterFactors(lowPass, highPass, wavData.FormatChunk.SampleRate, _l, n);
+                var bandFilterFactors = BasicFilter.BandPassFilterFactors(lowPass, highPass, wavData.FormatChunk.SampleRate, _filterLength, n);
 
                 windowsComplex[i] = FourierTransform.FFT(windows[i]);
                 for (int j = 0; j < windowsComplex[i].Length; j++)
@@ -94,9 +94,9 @@ namespace SoundProcessing.Core.WahWah
             {
                 for (int j = 0; j < windows[i].Length; j++)
                 {
-                    if (i * _r + j < wavData.Samples.Length)
+                    if (i * _windowHopSize + j < wavData.Samples.Length)
                     {
-                        result[i * _r + j] += windows[i][j];
+                        result[i * _windowHopSize + j] += windows[i][j];
                     }
                 }
             }

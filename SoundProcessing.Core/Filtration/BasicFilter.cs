@@ -8,29 +8,30 @@ namespace SoundProcessing.Core.Filtration
 {
     public static class BasicFilter
     {
-        public static double[] LowPassFilterFactors(double fc, double fs, int l)
+        public static double[] LowPassFilterFactors(double cutFreq, double sampleFreq, int filterLength)
         {
-            var result = new double[l];
-            var half = (l - 1) / 2.0;
-            for (int i = 0; i < l; i++)
+            var result = new double[filterLength];
+            var half = (filterLength - 1) / 2.0;
+            for (int i = 0; i < filterLength; i++)
             {
                 if (i == half)
                 {
-                    result[i] = 2 * fc / fs;
+                    result[i] = 2 * cutFreq / sampleFreq;
                 }
                 else
                 {
-                    result[i] = Math.Sin(2 * Math.PI * fc / fs * (i - half)) / (Math.PI * (i - half));
+                    result[i] = Math.Sin(2 * Math.PI * cutFreq / sampleFreq * (i - half)) / (Math.PI * (i - half));
                 }
             }
 
             return result;
         }
 
-        public static double[] HighPassFilterFactors(double fc, double fs, int l)
+        public static double[] HighPassFilterFactors(double cutFreq, double sampleFreq, int filterLength)
         {
-            fc = fs / 2 - fc;
-            var result = LowPassFilterFactors(fc, fs, l);
+            cutFreq = sampleFreq / 2 - cutFreq;
+            var result = LowPassFilterFactors(cutFreq, sampleFreq, filterLength);
+
             for (int i = 1; i <= result.Length; i++)
             {
                 result[i - 1] *= Math.Pow(-1.0, i);
@@ -39,31 +40,30 @@ namespace SoundProcessing.Core.Filtration
             return result;
         }
 
-
-        public static Complex[] BandPassFilterFactors(double fl, double fh, double fs, int l, int n)
+        public static Complex[] BandPassFilterFactors(double lowPassFreq, double highPassFreq, double sampleFreq, int filterLength, int n)
         {
             var window = new HanningWindow();
-            var windowFilterFactors = window.WindowFactors(l);
+            var windowFilterFactors = window.WindowFactors(filterLength);
 
-            var low = LowPassFilterFactors(fl, fs, l);
-            var high = HighPassFilterFactors(fh, fs, l);
+            var low = LowPassFilterFactors(lowPassFreq, sampleFreq, filterLength);
+            var high = HighPassFilterFactors(highPassFreq, sampleFreq, filterLength);
 
             var lowWindowed = new double[n];
             var highWindowed = new double[n];
 
-            for (int i = 0; i < l; i++)
+            for (int i = 0; i < filterLength; i++)
             {
                 lowWindowed[i] = low[i] * windowFilterFactors[i];
                 highWindowed[i] = high[i] * windowFilterFactors[i];
             }
 
-            for (int i = l; i < n; i++)
+            for (int i = filterLength; i < n; i++)
             {
                 lowWindowed[i] = 0;
                 highWindowed[i] = 0;
             }
 
-            var shiftNumberFilter = (l - 1) / 2;
+            var shiftNumberFilter = (filterLength - 1) / 2;
 
             var lowShiftedFilter = lowWindowed.Take(shiftNumberFilter);
             var lowFilteredTemp = lowWindowed.Skip(shiftNumberFilter).ToList();

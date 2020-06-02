@@ -11,32 +11,32 @@ namespace SoundProcessing.Core.Filtration
     public class FrequencyFiltration
     {
         private readonly IFourierWindow _window;
-        private readonly int _m;
-        private readonly int _r;
+        private readonly int _windowLength;
+        private readonly int _windowHopSize;
         private readonly FilterType _type;
-        private readonly int _l;
-        private readonly double _fc;
+        private readonly int _filterLength;
+        private readonly double _cutFreq;
         private readonly int? _n;
 
-        public FrequencyFiltration(IFourierWindow window, int m, int r, FilterType type, int l, double fc, int? n = null)
+        public FrequencyFiltration(IFourierWindow window, int windowLength, int windowHopSize, FilterType type, int filterLength, double cutFreq, int? n = null)
         {
             _window = window;
-            _m = m;
-            _r = r;
+            _windowLength = windowLength;
+            _windowHopSize = windowHopSize;
             _type = type;
-            _l = l;
-            _fc = fc;
+            _filterLength = filterLength;
+            _cutFreq = cutFreq;
             _n = n;
         }
 
         public double[] FilterData(WavData wavData)
         {
-            var n = _n ?? FourierHelper.GetExpandedPow2(_m + _l - 1);
-            var size = wavData.Samples.Length + n - _m;
+            var n = _n ?? FourierHelper.GetExpandedPow2(_windowLength + _filterLength - 1);
+            var size = wavData.Samples.Length + n - _windowLength;
             var result = new double[size];
 
-            var windows = new double[size / _r][];
-            var windowsComplex = new Complex[size / _r][];
+            var windows = new double[size / _windowHopSize][];
+            var windowsComplex = new Complex[size / _windowHopSize][];
 
             for (int i = 0; i < windows.Length; i++)
             {
@@ -44,35 +44,35 @@ namespace SoundProcessing.Core.Filtration
                 windowsComplex[i] = new Complex[n];
             }
 
-            var windowFactors = _window.WindowFactors(_m);
+            var windowFactors = _window.WindowFactors(_windowLength);
             for (int i = 0; i < windows.Length; i++)
             {
-                for (int j = 0; j < _m; j++)
+                for (int j = 0; j < _windowLength; j++)
                 {
-                    if (i * _r + j < wavData.Samples.Length)
+                    if (i * _windowHopSize + j < wavData.Samples.Length)
                     {
-                        windows[i][j] = windowFactors[j] * wavData.Samples[i * _r + j];
+                        windows[i][j] = windowFactors[j] * wavData.Samples[i * _windowHopSize + j];
                     }
                     else
                     {
                         windows[i][j] = 0;
                     }
                 }
-                for (int j = _m; j < n; j++)
+                for (int j = _windowLength; j < n; j++)
                 {
                     windows[i][j] = 0;
                 }
             }
 
-            var windowFilterFactors = _window.WindowFactors(_l);
-            var filterFactors = BasicFilter.LowPassFilterFactors(_fc, wavData.FormatChunk.SampleRate, _l);
+            var windowFilterFactors = _window.WindowFactors(_filterLength);
+            var filterFactors = BasicFilter.LowPassFilterFactors(_cutFreq, wavData.FormatChunk.SampleRate, _filterLength);
             var filtered = new double[n];
-            for (int i = 0; i < _l; i++)
+            for (int i = 0; i < _filterLength; i++)
             {
                 filtered[i] = windowFilterFactors[i] * filterFactors[i];
             }
 
-            for (int i = _l; i < n; i++)
+            for (int i = _filterLength; i < n; i++)
             {
                 filtered[i] = 0;
             }
@@ -80,7 +80,7 @@ namespace SoundProcessing.Core.Filtration
 
             if (_type == FilterType.NotCausal)
             {
-                var shiftNumberFilter = (_l - 1) / 2;
+                var shiftNumberFilter = (_filterLength - 1) / 2;
 
                 var shiftedFilter = filtered.Take(shiftNumberFilter);
                 var filteredTemp = filtered.Skip(shiftNumberFilter).ToList();
@@ -104,9 +104,9 @@ namespace SoundProcessing.Core.Filtration
             {
                 for (int j = 0; j < windows[i].Length; j++)
                 {
-                    if (i * _r + j < wavData.Samples.Length)
+                    if (i * _windowHopSize + j < wavData.Samples.Length)
                     {
-                        result[i * _r + j] += windows[i][j];
+                        result[i * _windowHopSize + j] += windows[i][j];
                     }
                 }
             }
