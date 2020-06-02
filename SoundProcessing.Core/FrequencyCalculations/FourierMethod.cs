@@ -69,7 +69,7 @@ namespace SoundProcessing.Core.FrequencyCalculations
             var threshold = window.Max(c => c.Magnitude) / 10;
             var localMax = 0;
 
-            for (int j = 1; j < window.Length; j++)
+            for (int j = 1; j < window.Length - 1; j++)
             {
                 if (window[j].Magnitude > threshold && window[j].Magnitude > window[j - 1].Magnitude && window[j].Magnitude > window[j + 1].Magnitude)
                 {

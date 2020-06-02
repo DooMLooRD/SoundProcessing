@@ -14,7 +14,6 @@ namespace SoundProcessing.Core.WahWah
     public class WahWah
     {
         private readonly IFourierWindow _window;
-        private readonly FilterType _type;
         private readonly int _m;
         private readonly int _r;
         private readonly int _l;
@@ -24,10 +23,9 @@ namespace SoundProcessing.Core.WahWah
         private readonly int _lfo;
         private readonly int _gain;
 
-        public WahWah(IFourierWindow window, FilterType type, int m, int r, int l, int fl, int fh, int bandSize, int lfo, int gain)
+        public WahWah(IFourierWindow window, int m, int r, int l, int fl, int fh, int bandSize, int lfo, int gain)
         {
             _window = window;
-            _type = type;
             _m = m;
             _r = r;
             _l = l;
@@ -81,30 +79,30 @@ namespace SoundProcessing.Core.WahWah
                 var highPass = lowPass + _bandSize;
 
                 var windowFilterFactors = _window.WindowFactors(_l);
-                var filterFactors = BasicFilter.LowPassFilterFactors(lowPass, wavData.FormatChunk.SampleRate, _l);
+                var lowFilterFactors = BasicFilter.LowPassFilterFactors(lowPass, wavData.FormatChunk.SampleRate, _l);
                 var highFilterFactors = BasicFilter.HighPassFilterFactors(highPass, wavData.FormatChunk.SampleRate, _l);
 
-                var filtered = new double[n];
+                var lowFiltered = new double[n];
                 var highFiltered = new double[n];
 
                 for (int j = 0; j < _l; j++)
                 {
-                    filtered[j] = windowFilterFactors[j] * filterFactors[j];
+                    lowFiltered[j] = windowFilterFactors[j] * lowFilterFactors[j];
                     highFiltered[j] = windowFilterFactors[j] * highFilterFactors[j];
                 }
 
                 for (int j = _l; j < n; j++)
                 {
-                    filtered[j] = 0;
+                    lowFiltered[j] = 0;
                     highFiltered[j] = 0;
                 }
 
-                var filteredComplex = FourierTransform.FFT(filtered);
+                var filteredComplex = FourierTransform.FFT(lowFiltered);
                 var highFilteredComplex = FourierTransform.FFT(highFiltered);
                 windowsComplex[i] = FourierTransform.FFT(windows[i]);
                 for (int j = 0; j < windowsComplex[i].Length; j++)
                 {
-                    windowsComplex[i][j] *= filteredComplex[j] * highFilteredComplex[j] * _gain;
+                    windowsComplex[i][j] += windowsComplex[i][j] * filteredComplex[j] * highFilteredComplex[j] * _gain;
                 }
                 windows[i] = FourierTransform.IFFT(windowsComplex[i]);
             }

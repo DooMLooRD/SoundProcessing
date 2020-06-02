@@ -1,4 +1,5 @@
-﻿using SoundProcessing.Core.Fourier;
+﻿using SoundProcessing.Core.Filtration;
+using SoundProcessing.Core.Fourier;
 using SoundProcessing.Core.Fourier.Windows;
 using SoundProcessing.Core.FrequencyCalculations;
 using SoundProcessing.Core.Helpers;
@@ -13,21 +14,21 @@ namespace SoundProcessing.Core.Equalizer
     public class Equalizer
     {
         private readonly IFourierWindow _window;
-        private readonly FilterType _type;
         private readonly int _m;
         private readonly int _r;
+        private readonly int _l;
 
-        public Equalizer(IFourierWindow window, FilterType type, int m, int r)
+        public Equalizer(IFourierWindow window, int m, int r, int l)
         {
             _window = window;
-            _type = type;
             _m = m;
             _r = r;
+            this._l = l;
         }
 
         public double[] Equalize(double[] gains, WavData wavData)
         {
-            var n = FourierHelper.GetExpandedPow2(_m);
+            var n = FourierHelper.GetExpandedPow2(_m + _l - 1);
             var size = wavData.Samples.Length + n - _m;
             var result = new double[size];
             var windows = new double[size / _r][];
@@ -58,15 +59,6 @@ namespace SoundProcessing.Core.Equalizer
                     windows[i][j] = 0;
                 }
 
-                if (_type == FilterType.NotCausal)
-                {
-                    var shiftNumberWindow = (_m - 1) / 2;
-                    var shiftedWindow = windows[i].Take(shiftNumberWindow).ToList();
-                    var windowTemp = windows[i].Skip(shiftNumberWindow).ToList();
-                    windowTemp.AddRange(shiftedWindow);
-                    windows[i] = windowTemp.ToArray();
-                }
-
                 windowsComplex[i] = FourierTransform.FFT(windows[i]);
                 windowsComplex[i] = AdjustGain(gains, windowsComplex[i], wavData.FormatChunk.SampleRate);
                 windows[i] = FourierTransform.IFFT(windowsComplex[i]);
@@ -89,64 +81,68 @@ namespace SoundProcessing.Core.Equalizer
 
         public Complex[] AdjustGain(double[] gains, Complex[] data, int sampleRate)
         {
-            var frequency = FourierMethod.Calculate(data, sampleRate);
-            var gain = 0.0;
-            if (frequency >= 20 && frequency < 40)
+            var n = data.Length;
+
+            var gain = new Complex[n];
+
+            for (int j = 0; j < data.Length; j++)
             {
-                gain = gains[0];
-            }
-            else if (frequency >= 40 && frequency < 80)
-            {
-                gain = gains[1];
-            }
-            else if (frequency >= 80 && frequency < 160)
-            {
-                gain = gains[2];
-            }
-            else if (frequency >= 160 && frequency < 320)
-            {
-                gain = gains[3];
-            }
-            else if (frequency >= 320 && frequency < 640)
-            {
-                gain = gains[4];
-            }
-            else if (frequency >= 640 && frequency < 1280)
-            {
-                gain = gains[5];
-            }
-            else if (frequency >= 1280 && frequency < 2560)
-            {
-                gain = gains[6];
-            }
-            else if (frequency >= 2560 && frequency < 5120)
-            {
-                gain = gains[7];
-            }
-            else if (frequency >= 5120 && frequency < 10240)
-            {
-                gain = gains[8];
-            }
-            else if (frequency >= 10240 && frequency < 20480)
-            {
-                gain = gains[9];
+                gain[j] = 0;
             }
 
+            var low = 40;
+            var high = 20;
+            for (int i = 0; i < 10; i++)
+            {
+                if (gains[i] != 0)
+                {
+                    AddGain(data, gain, sampleRate, n, low, high, gains[i]);
+                }
+
+                low *= 2;
+                high *= 2;
+            }
+
+            //for (int i = 0; i < data.Length; i++)
+            //{
+            //    data[i] += gain[i];
+            //}
+
+            return data;
+        }
+
+        public void AddGain(Complex[] data, Complex[] gains, int sampleRate, int n, int low, int high, double gain)
+        {
             if (gain < 0)
             {
                 gain = 1 / Math.Abs(gain);
             }
-            else if (gain == 0)
+
+            var windowFilterFactors = _window.WindowFactors(_l);
+            var lowFilterFactors = BasicFilter.LowPassFilterFactors(low, sampleRate, _l);
+            var highFilterFactors = BasicFilter.HighPassFilterFactors(high, sampleRate, _l);
+
+            var lowFiltered = new double[n];
+            var highFiltered = new double[n];
+
+            for (int j = 0; j < _l; j++)
             {
-                gain = 1;
+                lowFiltered[j] = windowFilterFactors[j] * lowFilterFactors[j];
+                highFiltered[j] = windowFilterFactors[j] * highFilterFactors[j];
             }
 
-            for (int i = 0; i < data.Length; i++)
+            for (int j = _l; j < n; j++)
             {
-                data[i] *= gain;
+                lowFiltered[j] = 0;
+                highFiltered[j] = 0;
             }
 
-            return data;
+            var filteredComplex = FourierTransform.FFT(lowFiltered);
+            var highFilteredComplex = FourierTransform.FFT(highFiltered);
+            for (int j = 0; j < data.Length; j++)
+            {
+                data[j] *= filteredComplex[j] * highFilteredComplex[j] * gain;
+            }
         }
     }
 }

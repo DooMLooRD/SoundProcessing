@@ -87,7 +87,7 @@ namespace SoundProcessing.View.ViewModels
 
         private void Equalize()
         {
-            var eqaulizer = new Equalizer(new HanningWindow(), FilterType.Causal, 2049, 1024);
+            var eqaulizer = new Equalizer(new HanningWindow(), 2049, 1024, 2049);
 
             var result = eqaulizer.Equalize(Gains.Select(c => c.Value).ToArray(), SelectedSound.WavData);
             ChartsViewModel.DrawPlots(SelectedSound.WavData.Samples, result);

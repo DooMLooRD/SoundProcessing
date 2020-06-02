@@ -82,20 +82,11 @@ namespace SoundProcessing.Core.Filtration
             if (_type == FilterType.NotCausal)
             {
                 var shiftNumberFilter = (_l - 1) / 2;
-                var shiftNumberWindow = (_m - 1) / 2;
 
                 var shiftedFilter = filtered.Take(shiftNumberFilter);
                 var filteredTemp = filtered.Skip(shiftNumberFilter).ToList();
                 filteredTemp.AddRange(shiftedFilter);
                 filtered = filteredTemp.ToArray();
-
-                for (int i = 0; i < windows.Length; i++)
-                {
-                    var shiftedWindow = windows[i].Take(shiftNumberWindow);
-                    var windowTemp = windows[i].Skip(shiftNumberWindow).ToList();
-                    windowTemp.AddRange(shiftedWindow);
-                    windows[i] = windowTemp.ToArray();
-                }
             }
 
             var filteredComplex = FourierTransform.FFT(filtered);
