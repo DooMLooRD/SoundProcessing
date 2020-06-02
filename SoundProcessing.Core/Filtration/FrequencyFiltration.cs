@@ -3,7 +3,6 @@ using SoundProcessing.Core.Fourier.Windows;
 using SoundProcessing.Core.Helpers;
 using SoundProcessing.Core.Model;
 using SoundProcessing.Core.Wav;
-using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 

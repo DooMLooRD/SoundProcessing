@@ -2,10 +2,7 @@
 using SoundProcessing.Core.Fourier.Windows;
 using SoundProcessing.Core.Model;
 using SoundProcessing.View.ViewModels.Base;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
 using System.Windows.Input;
 
 namespace SoundProcessing.View.ViewModels

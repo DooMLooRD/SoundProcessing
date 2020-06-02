@@ -1,6 +1,4 @@
-﻿using SoundProcessing.Core.Equalizer;
-using SoundProcessing.Core.Filtration;
-using SoundProcessing.Core.Fourier.Windows;
+﻿using SoundProcessing.Core.Fourier.Windows;
 using SoundProcessing.Core.FrequencyCalculations;
 using SoundProcessing.View.ViewModels.Base;
 using System.Collections.Generic;

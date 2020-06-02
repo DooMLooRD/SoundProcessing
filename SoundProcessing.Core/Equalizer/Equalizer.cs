@@ -1,12 +1,9 @@
 ﻿using SoundProcessing.Core.Filtration;
 using SoundProcessing.Core.Fourier;
 using SoundProcessing.Core.Fourier.Windows;
-using SoundProcessing.Core.FrequencyCalculations;
 using SoundProcessing.Core.Helpers;
-using SoundProcessing.Core.Model;
 using SoundProcessing.Core.Wav;
 using System;
-using System.Linq;
 using System.Numerics;
 
 namespace SoundProcessing.Core.Equalizer
@@ -23,7 +20,7 @@ namespace SoundProcessing.Core.Equalizer
             _window = window;
             _m = m;
             _r = r;
-            this._l = l;
+            _l = l;
         }
 
         public double[] Equalize(double[] gains, WavData wavData)
@@ -94,54 +91,32 @@ namespace SoundProcessing.Core.Equalizer
             var high = 20;
             for (int i = 0; i < 10; i++)
             {
-                if (gains[i] != 0)
+                if (gains[i] == 0)
                 {
-                    AddGain(data, gain, sampleRate, n, low, high, gains[i]);
+                    gains[i] += 1;
                 }
+
+                AddGain(data, gain, sampleRate, n, low, high, gains[i]);
 
                 low *= 2;
                 high *= 2;
             }
 
-            //for (int i = 0; i < data.Length; i++)
-            //{
-            //    data[i] += gain[i];
-            //}
-
-            return data;
+            return gain;
         }
 
         public void AddGain(Complex[] data, Complex[] gains, int sampleRate, int n, int low, int high, double gain)
         {
+            var bandFilterFactors = BasicFilter.BandPassFilterFactors(low, high, sampleRate, _l, n);
+
             if (gain < 0)
             {
-                gain = 1 / Math.Abs(gain);
+                gain = 1.0 / Math.Abs(gain);
             }
 
-            var windowFilterFactors = _window.WindowFactors(_l);
-            var lowFilterFactors = BasicFilter.LowPassFilterFactors(low, sampleRate, _l);
-            var highFilterFactors = BasicFilter.HighPassFilterFactors(high, sampleRate, _l);
-
-            var lowFiltered = new double[n];
-            var highFiltered = new double[n];
-
-            for (int j = 0; j < _l; j++)
-            {
-                lowFiltered[j] = windowFilterFactors[j] * lowFilterFactors[j];
-                highFiltered[j] = windowFilterFactors[j] * highFilterFactors[j];
-            }
-
-            for (int j = _l; j < n; j++)
-            {
-                lowFiltered[j] = 0;
-                highFiltered[j] = 0;
-            }
-
-            var filteredComplex = FourierTransform.FFT(lowFiltered);
-            var highFilteredComplex = FourierTransform.FFT(highFiltered);
             for (int j = 0; j < data.Length; j++)
             {
-                data[j] *= filteredComplex[j] * highFilteredComplex[j] * gain;
+                gains[j] += data[j] * bandFilterFactors[j] * gain;
             }
         }
     }
