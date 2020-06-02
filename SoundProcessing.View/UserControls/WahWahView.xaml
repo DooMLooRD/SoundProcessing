@@ -36,7 +36,7 @@
                         Margin="16 8"
                         Orientation="Horizontal">
                         <materialDesign:PackIcon
-                            Kind="Filter"
+                            Kind="GuitarElectric"
                             Height="32"
                             Width="32"
                             VerticalAlignment="Center" />
@@ -134,8 +134,8 @@
         </GroupBox>
         <Grid
             Grid.Column="1">
-            <local:FilterCharts
-                DataContext="{Binding FilterChartsViewModel}" />
+            <local:WahWahCharts
+                DataContext="{Binding WahWahChartsViewModel}" />
         </Grid>
     </Grid>
 </UserControl>

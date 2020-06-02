@@ -16,6 +16,7 @@ namespace SoundProcessing.View.ViewModels
         public SoundGeneratorViewModel SoundGeneratorViewModel { get; set; }
         public FrequencyFinderViewModel FrequencyFinderViewModel { get; set; }
         public SoundChartViewModel SoundChartViewModel { get; set; }
+        public WahWahViewModel WahWahViewModel { get; set; }
 
         public MainWindowViewModel()
         {
@@ -23,6 +24,7 @@ namespace SoundProcessing.View.ViewModels
             SoundPlayerViewModel = new SoundPlayerViewModel();
             FilterViewModel = new FilterViewModel(SoundPlayerViewModel);
             EqualizerViewModel = new EqualizerViewModel(SoundPlayerViewModel);
+            WahWahViewModel = new WahWahViewModel(SoundPlayerViewModel);
             SoundGeneratorViewModel = new SoundGeneratorViewModel(SoundPlayerViewModel);
             FrequencyFinderViewModel = new FrequencyFinderViewModel(SoundGeneratorViewModel, SoundPlayerViewModel, SoundChartViewModel);
             Open = new RelayCommand(Load);

@@ -52,6 +52,10 @@
                         <materialDesign:PackIcon
                             Kind="Equalizer" />
                     </ListBoxItem>
+                    <ListBoxItem>
+                        <materialDesign:PackIcon
+                            Kind="GuitarElectric" />
+                    </ListBoxItem>
                 </ListBox>
                 <Separator />
             </ToolBar>
@@ -79,6 +83,11 @@
                 Visibility="{Binding SelectedModel, Converter={StaticResource ModelConverter},ConverterParameter=2}">
                 <usercontrols:EqualizerView
                     DataContext="{Binding EqualizerViewModel}" />
+            </Grid>
+            <Grid
+                Visibility="{Binding SelectedModel, Converter={StaticResource ModelConverter},ConverterParameter=3}">
+                <usercontrols:WahWahView
+                    DataContext="{Binding WahWahViewModel}" />
             </Grid>
             <usercontrols:SoundPlayerView
                 Grid.Column="1"

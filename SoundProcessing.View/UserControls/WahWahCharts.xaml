@@ -1,0 +1,103 @@
+﻿<UserControl
+    x:Class="SoundProcessing.View.UserControls.WahWahCharts"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:SoundProcessing.View.UserControls"
+    mc:Ignorable="d"
+    xmlns:oxy="http://oxyplot.org/wpf"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextElement.FontWeight="Regular"
+    TextElement.FontSize="13"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
+    Background="{DynamicResource MaterialDesignPaper}"
+    FontFamily="{DynamicResource MaterialDesignFont}"
+    d:DesignHeight="450"
+    d:DesignWidth="800">
+    <GroupBox
+        Header="Wah Wah effect results"
+        BorderThickness="0"
+        Background="{StaticResource MaterialDesignPaper}"
+        Style="{DynamicResource MaterialDesignCardGroupBox}"
+        Padding="0"
+        Margin="16">
+        <GroupBox.HeaderTemplate>
+            <DataTemplate>
+                <StackPanel
+                    Margin="16 8"
+                    Orientation="Horizontal">
+                    <materialDesign:PackIcon
+                        Kind="ChartBar"
+                        Height="32"
+                        Width="32"
+                        VerticalAlignment="Center" />
+                    <TextBlock
+                        Margin="8,0,0,0"
+                        VerticalAlignment="Center"
+                        Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
+                        Text="{Binding}" />
+                </StackPanel>
+            </DataTemplate>
+        </GroupBox.HeaderTemplate>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition
+                    Height="Auto" />
+                <RowDefinition
+                    Height="*" />
+                <RowDefinition
+                    Height="Auto" />
+                <RowDefinition
+                    Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition
+                    Width="*" />
+                <ColumnDefinition
+                    Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock
+                Margin="15">Original Sound</TextBlock>
+            <oxy:PlotView
+                Grid.Column="0"
+                Grid.Row="1"
+                Foreground="{DynamicResource MaterialDesignBody}"
+                Background="{DynamicResource MaterialDesignPaper}"
+                Model="{Binding OriginalPlotModel}" />
+            <TextBlock
+                Margin="15"
+                Grid.Row="2">Sound with Wah Wah Effect</TextBlock>
+            <oxy:PlotView
+                Grid.Column="0"
+                Grid.Row="3"
+                Foreground="{DynamicResource MaterialDesignBody}"
+                Background="{DynamicResource MaterialDesignPaper}"
+                Model="{Binding WahWahPlotModel}" />
+            <Button
+                Margin="10 0"
+                Grid.Row="1"
+                Grid.Column="1"
+                Command="{Binding GenerateOriginalCommand}"
+                Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
+                Style="{StaticResource MaterialDesignIconForegroundButton}"
+                ToolTip="Generate Sound">
+                <materialDesign:PackIcon
+                    Kind="Plus" />
+            </Button>
+            <Button
+                Margin="10 0"
+                Grid.Row="3"
+                Grid.Column="1"
+                Command="{Binding GenerateWahWahCommand}"
+                Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
+                Style="{StaticResource MaterialDesignIconForegroundButton}"
+                ToolTip="Generate Sound">
+                <materialDesign:PackIcon
+                    Kind="Plus" />
+            </Button>
+        </Grid>
+    </GroupBox>
+</UserControl>
