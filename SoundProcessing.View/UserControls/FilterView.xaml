@@ -48,77 +48,81 @@
                     </StackPanel>
                 </DataTemplate>
             </GroupBox.HeaderTemplate>
-            <StackPanel
-                Margin="10">
-                <ComboBox
-                    materialDesign:HintAssist.FloatingScale="1.2"
-                    materialDesign:HintAssist.FloatingOffset="0, -20"
-                    materialDesign:HintAssist.Hint="Sound file"
-                    Style="{StaticResource MaterialDesignFloatingHintComboBox}"
-                    Margin="15"
-                    ItemsSource="{Binding SoundPlayerViewModel.Sounds}"
-                    SelectedItem="{Binding SelectedSound}" />
+            <ScrollViewer
+                VerticalScrollBarVisibility="Auto"
+                HorizontalScrollBarVisibility="Disabled">
+                <StackPanel
+                    Margin="10">
+                    <ComboBox
+                        materialDesign:HintAssist.FloatingScale="1.2"
+                        materialDesign:HintAssist.FloatingOffset="0, -20"
+                        materialDesign:HintAssist.Hint="Sound file"
+                        Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                        Margin="15"
+                        ItemsSource="{Binding SoundPlayerViewModel.Sounds}"
+                        SelectedItem="{Binding SelectedSound}" />
 
-                <ComboBox
-                    materialDesign:HintAssist.FloatingScale="1.2"
-                    materialDesign:HintAssist.FloatingOffset="0, -20"
-                    materialDesign:HintAssist.Hint="Window type"
-                    Style="{StaticResource MaterialDesignFloatingHintComboBox}"
-                    Margin="15"
-                    ItemsSource="{Binding WindowTypes}"
-                    SelectedItem="{Binding SelectedWindowType}" />
+                    <ComboBox
+                        materialDesign:HintAssist.FloatingScale="1.2"
+                        materialDesign:HintAssist.FloatingOffset="0, -20"
+                        materialDesign:HintAssist.Hint="Window type"
+                        Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                        Margin="15"
+                        ItemsSource="{Binding WindowTypes}"
+                        SelectedItem="{Binding SelectedWindowType}" />
 
-                <TextBox
-                    Margin="15"
-                    materialDesign:HintAssist.FloatingScale="1.2"
-                    materialDesign:HintAssist.FloatingOffset="0, -20"
-                    materialDesign:HintAssist.Hint="Cut Frequency"
-                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                    Text="{Binding CutFrequency}" />
-                <TextBox
-                    Margin="15"
-                    materialDesign:HintAssist.FloatingScale="1.2"
-                    materialDesign:HintAssist.FloatingOffset="0, -20"
-                    materialDesign:HintAssist.Hint="Filter Length"
-                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                    Text="{Binding FilterLength}" />
+                    <TextBox
+                        Margin="15"
+                        materialDesign:HintAssist.FloatingScale="1.2"
+                        materialDesign:HintAssist.FloatingOffset="0, -20"
+                        materialDesign:HintAssist.Hint="Cut Frequency"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                        Text="{Binding CutFrequency}" />
+                    <TextBox
+                        Margin="15"
+                        materialDesign:HintAssist.FloatingScale="1.2"
+                        materialDesign:HintAssist.FloatingOffset="0, -20"
+                        materialDesign:HintAssist.Hint="Filter Length"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                        Text="{Binding FilterLength}" />
 
-                <TextBlock
-                    Margin="15"
-                    Text="Frequency domain parameters" />
-                <TextBox
-                    Margin="15"
-                    materialDesign:HintAssist.FloatingScale="1.2"
-                    materialDesign:HintAssist.FloatingOffset="0, -20"
-                    materialDesign:HintAssist.Hint="Window Length"
-                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                    Text="{Binding WindowLength}" />
-                <TextBox
-                    Margin="15"
-                    materialDesign:HintAssist.FloatingScale="1.2"
-                    materialDesign:HintAssist.FloatingOffset="0, -20"
-                    materialDesign:HintAssist.Hint="Window Hop-Size"
-                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                    Text="{Binding WindowHopSize}" />
-                <CheckBox
-                    x:Name="MaterialDesignFilledTextFieldTextBoxEnabledComboBox"
-                    IsChecked="{Binding IsCausal}"
-                    Content="Is Causal Filter"
-                    Margin="15 15 15 0" />
-                <TextBox
-                    Margin="15"
-                    materialDesign:HintAssist.FloatingScale="1.2"
-                    materialDesign:HintAssist.FloatingOffset="0, -20"
-                    materialDesign:HintAssist.Hint="N"
-                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                    Text="{Binding N}" />
-                <Button
-                    Margin="15"
-                    Grid.Column="2"
-                    IsEnabled="{Binding IsButtonEnabled}"
-                    Content="Filter"
-                    Command="{Binding FilterCommand}" />
-            </StackPanel>
+                    <TextBlock
+                        Margin="15"
+                        Text="Frequency domain parameters" />
+                    <TextBox
+                        Margin="15"
+                        materialDesign:HintAssist.FloatingScale="1.2"
+                        materialDesign:HintAssist.FloatingOffset="0, -20"
+                        materialDesign:HintAssist.Hint="Window Length"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                        Text="{Binding WindowLength}" />
+                    <TextBox
+                        Margin="15"
+                        materialDesign:HintAssist.FloatingScale="1.2"
+                        materialDesign:HintAssist.FloatingOffset="0, -20"
+                        materialDesign:HintAssist.Hint="Window Hop-Size"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                        Text="{Binding WindowHopSize}" />
+                    <CheckBox
+                        x:Name="MaterialDesignFilledTextFieldTextBoxEnabledComboBox"
+                        IsChecked="{Binding IsCausal}"
+                        Content="Is Causal Filter"
+                        Margin="15 15 15 0" />
+                    <TextBox
+                        Margin="15"
+                        materialDesign:HintAssist.FloatingScale="1.2"
+                        materialDesign:HintAssist.FloatingOffset="0, -20"
+                        materialDesign:HintAssist.Hint="N"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                        Text="{Binding N}" />
+                    <Button
+                        Margin="15"
+                        Grid.Column="2"
+                        IsEnabled="{Binding IsButtonEnabled}"
+                        Content="Filter"
+                        Command="{Binding FilterCommand}" />
+                </StackPanel>
+            </ScrollViewer>
         </GroupBox>
         <Grid
             Grid.Column="1">

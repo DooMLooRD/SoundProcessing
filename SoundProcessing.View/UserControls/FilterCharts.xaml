@@ -119,39 +119,102 @@
                 Foreground="{DynamicResource MaterialDesignBody}"
                 Background="{DynamicResource MaterialDesignPaper}"
                 Model="{Binding FrequencyPlotModel}" />
-            <Button
-                Margin="10 0"
-                Grid.Row="1"
+            <Grid
                 Grid.Column="1"
-                Command="{Binding GenerateOriginalCommand}"
-                Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
-                Style="{StaticResource MaterialDesignIconForegroundButton}"
-                ToolTip="Generate Sound">
-                <materialDesign:PackIcon
-                    Kind="Plus" />
-            </Button>
-            <Button
-                Margin="10 0"
-                Grid.Row="3"
+                Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition
+                        Height="*" />
+                    <RowDefinition
+                        Height="*" />
+                </Grid.RowDefinitions>
+                <Button
+                    Margin="10"
+                    Grid.Row="0"
+                    VerticalAlignment="Bottom"
+                    Command="{Binding GenerateOriginalCommand}"
+                    Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
+                    Style="{StaticResource MaterialDesignIconForegroundButton}"
+                    ToolTip="Generate Sound">
+                    <materialDesign:PackIcon
+                        Kind="Plus" />
+                </Button>
+                <Button
+                    Margin="10"
+                    Grid.Row="1"
+                    VerticalAlignment="Top"
+                    Command="{Binding SaveOriginalCommand}"
+                    Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
+                    Style="{StaticResource MaterialDesignIconForegroundButton}"
+                    ToolTip="Save chart">
+                    <materialDesign:PackIcon
+                        Kind="ContentSave" />
+                </Button>
+            </Grid>
+            <Grid
                 Grid.Column="1"
-                Command="{Binding GenerateTimeCommand}"
-                Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
-                Style="{StaticResource MaterialDesignIconForegroundButton}"
-                ToolTip="Generate Sound">
-                <materialDesign:PackIcon
-                    Kind="Plus" />
-            </Button>
-            <Button
-                Margin="10 0"
-                Grid.Row="5"
+                Grid.Row="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition
+                        Height="*" />
+                    <RowDefinition
+                        Height="*" />
+                </Grid.RowDefinitions>
+                <Button
+                    Margin="10"
+                    Grid.Row="0"
+                    VerticalAlignment="Bottom"
+                    Command="{Binding GenerateTimeCommand}"
+                    Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
+                    Style="{StaticResource MaterialDesignIconForegroundButton}"
+                    ToolTip="Generate Sound">
+                    <materialDesign:PackIcon
+                        Kind="Plus" />
+                </Button>
+                <Button
+                    Margin="10"
+                    Grid.Row="1"
+                    VerticalAlignment="Top"
+                    Command="{Binding SaveTimeCommand}"
+                    Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
+                    Style="{StaticResource MaterialDesignIconForegroundButton}"
+                    ToolTip="Save chart">
+                    <materialDesign:PackIcon
+                        Kind="ContentSave" />
+                </Button>
+            </Grid>
+            <Grid
                 Grid.Column="1"
-                Command="{Binding GenerateFrequencyCommand}"
-                Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
-                Style="{StaticResource MaterialDesignIconForegroundButton}"
-                ToolTip="Generate Sound">
-                <materialDesign:PackIcon
-                    Kind="Plus" />
-            </Button>
+                Grid.Row="5">
+                <Grid.RowDefinitions>
+                    <RowDefinition
+                        Height="*" />
+                    <RowDefinition
+                        Height="*" />
+                </Grid.RowDefinitions>
+                <Button
+                    Margin="10"
+                    Grid.Row="0"
+                    VerticalAlignment="Bottom"
+                    Command="{Binding GenerateFrequencyCommand}"
+                    Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
+                    Style="{StaticResource MaterialDesignIconForegroundButton}"
+                    ToolTip="Generate Sound">
+                    <materialDesign:PackIcon
+                        Kind="Plus" />
+                </Button>
+                <Button
+                    Margin="10"
+                    Grid.Row="1"
+                    VerticalAlignment="Top"
+                    Command="{Binding SaveFrequencyCommand}"
+                    Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
+                    Style="{StaticResource MaterialDesignIconForegroundButton}"
+                    ToolTip="Save chart">
+                    <materialDesign:PackIcon
+                        Kind="ContentSave" />
+                </Button>
+            </Grid>
         </Grid>
     </GroupBox>
 </UserControl>

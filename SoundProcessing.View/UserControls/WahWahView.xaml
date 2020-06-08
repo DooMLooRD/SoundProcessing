@@ -48,89 +48,63 @@
                     </StackPanel>
                 </DataTemplate>
             </GroupBox.HeaderTemplate>
-            <StackPanel
-                Margin="10">
-                <ComboBox
-                    materialDesign:HintAssist.FloatingScale="1.2"
-                    materialDesign:HintAssist.FloatingOffset="0, -20"
-                    materialDesign:HintAssist.Hint="Sound file"
-                    Style="{StaticResource MaterialDesignFloatingHintComboBox}"
-                    Margin="15"
-                    ItemsSource="{Binding SoundPlayerViewModel.Sounds}"
-                    SelectedItem="{Binding SelectedSound}" />
+            <ScrollViewer
+                VerticalScrollBarVisibility="Auto"
+                HorizontalScrollBarVisibility="Disabled">
+                <StackPanel
+                    Margin="10">
+                    <ComboBox
+                        materialDesign:HintAssist.FloatingScale="1.2"
+                        materialDesign:HintAssist.FloatingOffset="0, -20"
+                        materialDesign:HintAssist.Hint="Sound file"
+                        Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                        Margin="15"
+                        ItemsSource="{Binding SoundPlayerViewModel.Sounds}"
+                        SelectedItem="{Binding SelectedSound}" />
 
-                <ComboBox
-                    materialDesign:HintAssist.FloatingScale="1.2"
-                    materialDesign:HintAssist.FloatingOffset="0, -20"
-                    materialDesign:HintAssist.Hint="Window type"
-                    Style="{StaticResource MaterialDesignFloatingHintComboBox}"
-                    Margin="15"
-                    ItemsSource="{Binding WindowTypes}"
-                    SelectedItem="{Binding SelectedWindowType}" />
-                <TextBox
-                    Margin="15"
-                    materialDesign:HintAssist.FloatingScale="1.2"
-                    materialDesign:HintAssist.FloatingOffset="0, -20"
-                    materialDesign:HintAssist.Hint="Window Length"
-                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                    Text="{Binding WindowLength}" />
-                <TextBox
-                    Margin="15"
-                    materialDesign:HintAssist.FloatingScale="1.2"
-                    materialDesign:HintAssist.FloatingOffset="0, -20"
-                    materialDesign:HintAssist.Hint="Window Hop-Size"
-                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                    Text="{Binding WindowHopSize}" />
-                <TextBox
-                    Margin="15"
-                    materialDesign:HintAssist.FloatingScale="1.2"
-                    materialDesign:HintAssist.FloatingOffset="0, -20"
-                    materialDesign:HintAssist.Hint="Filter Length"
-                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                    Text="{Binding FilterLength}" />
-
-                <TextBox
-                    Margin="15"
-                    materialDesign:HintAssist.FloatingScale="1.2"
-                    materialDesign:HintAssist.FloatingOffset="0, -20"
-                    materialDesign:HintAssist.Hint="Start Band Frequency (Hz)"
-                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                    Text="{Binding StartBandFrequency}" />
-                <TextBox
-                    Margin="15"
-                    materialDesign:HintAssist.FloatingScale="1.2"
-                    materialDesign:HintAssist.FloatingOffset="0, -20"
-                    materialDesign:HintAssist.Hint="End Band Frequency (Hz)"
-                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                    Text="{Binding EndBandFrequency}" />
-                <TextBox
-                    Margin="15"
-                    materialDesign:HintAssist.FloatingScale="1.2"
-                    materialDesign:HintAssist.FloatingOffset="0, -20"
-                    materialDesign:HintAssist.Hint="Band Size"
-                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                    Text="{Binding BandSize}" />
-                <TextBox
-                    Margin="15"
-                    materialDesign:HintAssist.FloatingScale="1.2"
-                    materialDesign:HintAssist.FloatingOffset="0, -20"
-                    materialDesign:HintAssist.Hint="LFO Frequency (Hz)"
-                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                    Text="{Binding LFO}" />
-                <TextBox
-                    Margin="15"
-                    materialDesign:HintAssist.FloatingScale="1.2"
-                    materialDesign:HintAssist.FloatingOffset="0, -20"
-                    materialDesign:HintAssist.Hint="Gain (dB)"
-                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                    Text="{Binding Gain}" />
-                <Button
-                    Margin="15"
-                    Grid.Column="2"
-                    IsEnabled="{Binding IsButtonEnabled}"
-                    Content="Apply"
-                    Command="{Binding ApplyCommand}" />
-            </StackPanel>
+                    <TextBox
+                        Margin="15"
+                        materialDesign:HintAssist.FloatingScale="1.2"
+                        materialDesign:HintAssist.FloatingOffset="0, -20"
+                        materialDesign:HintAssist.Hint="Start Band Frequency (Hz)"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                        Text="{Binding StartBandFrequency}" />
+                    <TextBox
+                        Margin="15"
+                        materialDesign:HintAssist.FloatingScale="1.2"
+                        materialDesign:HintAssist.FloatingOffset="0, -20"
+                        materialDesign:HintAssist.Hint="End Band Frequency (Hz)"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                        Text="{Binding EndBandFrequency}" />
+                    <TextBox
+                        Margin="15"
+                        materialDesign:HintAssist.FloatingScale="1.2"
+                        materialDesign:HintAssist.FloatingOffset="0, -20"
+                        materialDesign:HintAssist.Hint="Band Size"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                        Text="{Binding BandSize}" />
+                    <TextBox
+                        Margin="15"
+                        materialDesign:HintAssist.FloatingScale="1.2"
+                        materialDesign:HintAssist.FloatingOffset="0, -20"
+                        materialDesign:HintAssist.Hint="LFO Frequency (Hz)"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                        Text="{Binding LFO}" />
+                    <TextBox
+                        Margin="15"
+                        materialDesign:HintAssist.FloatingScale="1.2"
+                        materialDesign:HintAssist.FloatingOffset="0, -20"
+                        materialDesign:HintAssist.Hint="Gain (dB)"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                        Text="{Binding Gain}" />
+                    <Button
+                        Margin="15"
+                        Grid.Column="2"
+                        IsEnabled="{Binding IsButtonEnabled}"
+                        Content="Apply"
+                        Command="{Binding ApplyCommand}" />
+                </StackPanel>
+            </ScrollViewer>
         </GroupBox>
         <Grid
             Grid.Column="1">
